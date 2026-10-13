@@ -1,11 +1,12 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { USAGE_SOURCE_ICON, USAGE_SOURCE_ID, USAGE_SOURCE_LABEL } from "../shared/account.js";
 
-const root = fileURLToPath(new URL("..", import.meta.url));
+// `new URL(...)` here clashes with fileURLToPath over two conflicting URL typings in the
+// installed node types, so take the directory straight from the runtime instead.
+const root = join(import.meta.dirname, "..");
 
 async function readJson(relativePath: string): Promise<Record<string, unknown>> {
   return JSON.parse(await readFile(join(root, relativePath), "utf8"));
