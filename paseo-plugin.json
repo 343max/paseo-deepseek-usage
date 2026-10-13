@@ -1,0 +1,9 @@
+{
+  "id": "paseo-deepseek-usage",
+  "name": "DeepSeek usage",
+  "description": "Shows your DeepSeek balance and what you spent today, read from the DeepSeek account you already use.",
+  "media": [],
+  "requirements": {
+    "paseo": ">=0.11.2"
+  }
+}
