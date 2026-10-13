@@ -85,23 +85,16 @@ export default function contribute(server: PluginServerContext) {
 
   server.handle(usageSnapshotRpc, () => readSnapshot());
 
-  try {
-    server.registerUsageSource({
-      id: USAGE_SOURCE_ID,
-      label: USAGE_SOURCE_LABEL,
-      icon: USAGE_SOURCE_ICON,
-      input: usageInputSchema,
-      discover: (scope) => discoverAccounts(scope),
-      fetch: fetchUsage,
-    });
-  } catch (error) {
-    // A bundled DeepSeek source wins. Stay loaded and quiet instead of failing the plugin.
-    console.warn(
-      `${LOG_PREFIX} a DeepSeek usage source is already registered; contributing nothing`,
-      error,
-    );
-    return () => {};
-  }
+  // Registered unconditionally. A duplicate id is rejected by the daemon, not by this call, so a
+  // guard here could never fire; the id is chosen not to collide instead.
+  server.registerUsageSource({
+    id: USAGE_SOURCE_ID,
+    label: USAGE_SOURCE_LABEL,
+    icon: USAGE_SOURCE_ICON,
+    input: usageInputSchema,
+    discover: (scope) => discoverAccounts(scope),
+    fetch: fetchUsage,
+  });
 
   const stopSampler = startSampler({
     ledger,

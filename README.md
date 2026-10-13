@@ -143,9 +143,10 @@ OVERVIEW.md           the plugin page text for a registry listing
 
 ## Notes
 
-- Window ids (`budget:day`, `budget:rolling`) are part of saved pins, so they are stable by
-  design and a window id never changes period underneath them.
+- Window ids (`budget:day`, `budget:rolling`) and the usage source id (`deepseek-usage`) are
+  part of saved pins, so they are stable by design and never change meaning underneath a pin.
+  The source id is namespaced rather than the bare vendor name on purpose: the daemon rejects a
+  duplicate source id by failing whichever plugin registers it second, so `deepseek` would
+  break the moment a bundled DeepSeek source appeared.
 - The settings document has been through three schema versions and the ledger through two. Both
   migrate in place, so an upgraded plugin keeps your limits and the current day's counters.
-- The usage source registers the id `deepseek`. If a future Paseo ships its own DeepSeek source,
-  the plugin logs a line, contributes nothing, and stays loaded rather than failing.
