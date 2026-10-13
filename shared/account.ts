@@ -16,12 +16,12 @@ export const usageInputSchema = z
 export type UsageInput = z.infer<typeof usageInputSchema>;
 
 /**
- * The usage source id. Deliberately not the bare vendor name: the daemon rejects a duplicate
- * source id by failing whichever plugin registers it second, so `deepseek` would break this
- * plugin the moment a bundled DeepSeek source, or another plugin, claimed it. Saved pins
- * reference this id, so treat it as permanent. Users only ever see the label.
+ * The usage source id, namespaced so it cannot be claimed by a bundled source or another
+ * plugin's installation. The daemon rejects a duplicate source id by failing whichever plugin
+ * registers it second, so a bare vendor name would be a load failure waiting to happen. Saved
+ * pins reference this id, so treat it as permanent. Users only ever see the label.
  */
-export const USAGE_SOURCE_ID = "deepseek-usage";
+export const USAGE_SOURCE_ID = "max343-deepseek-usage";
 export const USAGE_SOURCE_LABEL = "DeepSeek";
 export const USAGE_SOURCE_ICON = "icon.svg";
 
