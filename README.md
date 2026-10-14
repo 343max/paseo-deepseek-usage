@@ -125,6 +125,9 @@ Nothing leaves the daemon machine except the request to `api.deepseek.com`.
 npm run typecheck
 npm test
 
+# Regenerate the sidebar icon after changing icon.svg.
+npm run icon
+
 # One opt-in check that hits the real API and reads the real state on this machine.
 DEEPSEEK_LIVE=1 npx vitest run tests/live.test.ts
 ```
@@ -142,9 +145,12 @@ index.server.ts       registers the usage source, the settings document, the sna
 index.client.tsx      the settings screen, the sidebar balance row, and two command center items
 client/settings.tsx   live balance header, budget form, link to the usage page
 client/balance-item.tsx  the sidebar footer row and the breakdown it opens
+client/deepseek-icon.tsx  the row's mark, drawn from a generated data URI
+client/deepseek-icon-data.ts  generated from icon.svg by `npm run icon`
 shared/               zod contracts and plain values used by both runtimes
 server/               balance client, credential store, ledger, sampler, report builder
 tests/                vitest, plus the opt-in live check
+scripts/              icon rasterisation, run by `npm run icon`
 OVERVIEW.md           the plugin page text for a registry listing
 ```
 

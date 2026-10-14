@@ -7,6 +7,7 @@ import { CONSOLE_USAGE_URL } from "../shared/account.js";
 import { formatBalance } from "../shared/budget.js";
 import { usageBalanceRpc } from "../shared/snapshot.js";
 import { formatSampledAt, formatSpend } from "./format.js";
+import { DeepSeekIcon } from "./deepseek-icon.js";
 
 /**
  * How often the row re-reads the ledger while the app is in the foreground. It is a local read,
@@ -109,5 +110,5 @@ export function BalanceSidebarItem({ openPopover }: PluginSidebarItemProps) {
       : data?.status === "unavailable"
         ? "Balance unavailable"
         : "Balance";
-  return <SidebarRow icon="Wallet" label={label} onPress={() => openPopover(BalanceDetails)} />;
+  return <SidebarRow icon={DeepSeekIcon} label={label} onPress={() => openPopover(BalanceDetails)} />;
 }
