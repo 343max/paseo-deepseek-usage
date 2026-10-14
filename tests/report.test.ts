@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { UsageReportSchema } from "@getpaseo/protocol/messages";
 import {
   DEFAULT_SETTINGS,
+  formatBalance,
   parseBudgetInput,
   resolveSettings,
   usageSettings,
@@ -151,6 +152,11 @@ describe("buildReport", () => {
 });
 
 describe("settings helpers", () => {
+  it("phrases the balance the way the sidebar row shows it", () => {
+    expect(formatBalance(28.95, "USD")).toBe("$28.95 left");
+    expect(formatBalance(88.5, "CNY")).toBe("88.50 CNY left");
+  });
+
   it("treats an empty field as no limit", () => {
     expect(parseBudgetInput("  ")).toEqual({ value: null });
   });

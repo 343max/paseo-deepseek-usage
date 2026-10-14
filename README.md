@@ -1,7 +1,8 @@
 # DeepSeek usage for Paseo
 
 A Paseo plugin that puts your DeepSeek balance in the usage panel beside Claude, Codex, and
-the other built in sources, and measures your spend against limits you set.
+the other built in sources, keeps the balance in a row at the bottom of the sidebar, and
+measures your spend against limits you set.
 
 ![The DeepSeek card in the usage panel](assets/usage-panel.png)
 
@@ -79,6 +80,11 @@ spent today, and what you spent over the last 30 days, above the limits those fi
 measured against. Command K opens the same screen, and a second command opens DeepSeek's own
 usage page in your browser.
 
+The sidebar footer carries the same balance, so it stays in view without opening anything.
+The row reads the reading the sampler already took and never makes a request of its own, so it
+costs nothing to leave on screen; pressing it shows today's and the 30 day spend. Turn it off
+or move it under Settings, then Sidebar.
+
 | Setting | Default | What it does |
 | --- | --- | --- |
 | Daily limit | no limit | Spend since local midnight as a percentage. This is the window that appears in the sidebar. It resets at your own midnight. |
@@ -133,8 +139,9 @@ The live check is opt-in because it spends a fraction of a cent and needs a real
 paseo-plugin.json     plugin id, display name, and the Paseo version it needs
 index.server.ts       registers the usage source, the settings document, the snapshot RPC,
                       and the background sampler
-index.client.tsx      the settings screen and two command center items
+index.client.tsx      the settings screen, the sidebar balance row, and two command center items
 client/settings.tsx   live balance header, budget form, link to the usage page
+client/balance-item.tsx  the sidebar footer row and the breakdown it opens
 shared/               zod contracts and plain values used by both runtimes
 server/               balance client, credential store, ledger, sampler, report builder
 tests/                vitest, plus the opt-in live check

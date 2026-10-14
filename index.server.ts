@@ -7,7 +7,7 @@ import {
   usageInputSchema,
 } from "./shared/account.js";
 import { resolveSettings, usageSettings, type UsageSettingsValues } from "./shared/budget.js";
-import { usageSnapshotRpc, type UsageSnapshot } from "./shared/snapshot.js";
+import { usageBalanceRpc, usageSnapshotRpc, type UsageSnapshot } from "./shared/snapshot.js";
 import { accountKeyFor, discoverAccounts } from "./server/accounts.js";
 import { buildReport } from "./server/report.js";
 import { sampleAccount } from "./server/sample.js";
@@ -55,10 +55,11 @@ export default function contribute(server: PluginServerContext) {
   };
 
   /**
-   * What the settings screen shows. Its own balance read is throttled, so opening the screen
-   * twice in a row does not hit the API twice.
+   * The figures both the settings screen and the sidebar row show. `refresh` is what separates
+   * them: the settings screen may spend a balance request when its reading is stale, while the
+   * sidebar row reads what the sampler already wrote and nothing else.
    */
-  const readSnapshot = async (): Promise<UsageSnapshot> => {
+  const readSnapshot = async ({ refresh }: { refresh: boolean }): Promise<UsageSnapshot> => {
     const settings = await readSettingsValues();
     const accounts = await discoverAccounts({ kind: "global" });
     if (accounts.length === 0) {
@@ -71,19 +72,20 @@ export default function contribute(server: PluginServerContext) {
     const input = usageInputSchema.parse(accounts[0].input);
     const key = accountKeyFor(input);
     let entry = (await ledger.read()).accounts[key];
-    if (isStale(entry, new Date())) {
+    if (refresh && isStale(entry, new Date())) {
       try {
         const result = await sampleAccount(input, { ledger });
         if (result.kind === "ok") entry = result.entry;
       } catch (error) {
         // Keep showing the last known numbers rather than the screen going blank.
-        console.warn(`${LOG_PREFIX} settings snapshot refresh failed`, error);
+        console.warn(`${LOG_PREFIX} snapshot refresh failed`, error);
       }
     }
     return buildSnapshot({ entry, settings, now: new Date() });
   };
 
-  server.handle(usageSnapshotRpc, () => readSnapshot());
+  server.handle(usageSnapshotRpc, () => readSnapshot({ refresh: true }));
+  server.handle(usageBalanceRpc, () => readSnapshot({ refresh: false }));
 
   // Registered unconditionally. A duplicate id is rejected by the daemon, not by this call, so a
   // guard here could never fire; the id is chosen not to collide instead.

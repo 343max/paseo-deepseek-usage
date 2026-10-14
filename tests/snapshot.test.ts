@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_SETTINGS } from "../shared/budget.js";
+import { usageBalanceRpc, usageSnapshotRpc } from "../shared/snapshot.js";
 import type { AccountLedger } from "../server/ledger.js";
 import { buildSnapshot, isStale, SNAPSHOT_STALE_MS } from "../server/snapshot.js";
 
@@ -51,6 +52,19 @@ describe("buildSnapshot", () => {
     expect(snapshot.status).toBe("unavailable");
     if (snapshot.status !== "unavailable") return;
     expect(snapshot.reason).toContain("No balance has been read yet");
+  });
+});
+
+describe("usage RPCs", () => {
+  it("are named for what they read", () => {
+    expect(usageSnapshotRpc.name).toBe("usage.snapshot");
+    expect(usageBalanceRpc.name).toBe("usage.balance");
+  });
+
+  it("share one figure shape, so both surfaces parse the same payload", () => {
+    const figures = buildSnapshot({ entry, settings, now: NOW });
+    expect(usageSnapshotRpc.output.parse(figures)).toEqual(figures);
+    expect(usageBalanceRpc.output.parse(figures)).toEqual(figures);
   });
 });
 

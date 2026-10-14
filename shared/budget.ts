@@ -74,3 +74,8 @@ export function formatAmount(value: number, currency: string): string {
   const text = value.toFixed(2);
   return currency === "USD" ? `$${text}` : `${text} ${currency}`;
 }
+
+/** The sidebar row's one line: the amount with its unit, phrased as the settings screen does. */
+export function formatBalance(balance: number, currency: string): string {
+  return `${formatAmount(balance, currency)} left`;
+}

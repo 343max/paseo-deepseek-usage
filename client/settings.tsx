@@ -16,29 +16,16 @@ import { CONSOLE_USAGE_URL } from "../shared/account.js";
 import {
   DEFAULT_SETTINGS,
   SAMPLE_INTERVAL_OPTIONS,
-  formatAmount,
+  formatBalance,
   parseBudgetInput,
   usageSettings,
   type UsageSettingsValues,
 } from "../shared/budget.js";
 import { usageSnapshotRpc } from "../shared/snapshot.js";
+import { formatSampledAt, formatSpend } from "./format.js";
 
 function formatBudget(value: number | null): string {
   return value === null ? "" : String(value);
-}
-
-/** "0.25 of 2.00", with the wallet's own currency on both sides. */
-function formatSpend(spend: number, budget: number | null, currency: string): string {
-  if (budget === null) return `${formatAmount(spend, currency)} spent`;
-  return `${formatAmount(spend, currency)} of ${formatAmount(budget, currency)}`;
-}
-
-function formatSampledAt(sampledAt: string): string {
-  const date = new Date(sampledAt);
-  if (Number.isNaN(date.getTime())) return "unknown";
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
 }
 
 function SnapshotRow({
@@ -139,7 +126,7 @@ export function UsageSettingsScreen({ theme }: PluginSurfaceProps) {
               <SnapshotRow
                 label={`Balance (${data.currency})`}
                 hint={`Last read at ${formatSampledAt(data.sampledAt)}`}
-                value={`${formatAmount(data.balance, data.currency)} left`}
+                value={formatBalance(data.balance, data.currency)}
                 color={theme.colors.foreground}
               />
               <SnapshotRow

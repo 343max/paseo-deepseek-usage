@@ -1,6 +1,7 @@
 import type { PluginClientContext } from "@getpaseo/plugin/client";
 import { openExternalUrl } from "@getpaseo/plugin/client";
 import { CONSOLE_USAGE_URL } from "./shared/account.js";
+import { BalanceSidebarItem } from "./client/balance-item.js";
 import { UsageSettingsScreen } from "./client/settings.js";
 
 const SETTINGS_SCREEN_ID = "budgets";
@@ -11,6 +12,12 @@ export default function contribute(client: PluginClientContext) {
     title: "DeepSeek usage",
     icon: "Gauge",
     Component: UsageSettingsScreen,
+  });
+
+  client.addSidebarFooterItem({
+    id: "balance",
+    title: "DeepSeek balance",
+    Component: BalanceSidebarItem,
   });
 
   client.addCommandCenterItem({
