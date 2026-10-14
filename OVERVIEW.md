@@ -34,9 +34,9 @@ Open Settings, then Plugins, then DeepSeek usage. The screen opens with your bal
 spent today, and what you spent over the last 30 days, then the limits those figures are
 measured against. Two commands in the command center, which you reach with Command K on macOS
 or Control K elsewhere, open the settings screen and the web usage page. The sidebar footer
-shows the balance too, and pressing it shows today's and the 30 day spend. The row reads the
-last reading rather than taking one, so it never spends a request of its own, and it can be
-moved or hidden under Settings, then Sidebar.
+shows the balance too, with what today has cost beside it, and pressing it shows the balance
+against both limits. The row reads the last reading rather than taking one, so it never spends a
+request of its own, and it can be moved or hidden under Settings, then Sidebar.
 
 - Daily limit: spend since local midnight, as a percentage. This is the window that appears in
   the sidebar next to the other providers. It resets at your own midnight, and no reset time is

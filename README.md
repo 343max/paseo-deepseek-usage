@@ -80,10 +80,11 @@ spent today, and what you spent over the last 30 days, above the limits those fi
 measured against. Command K opens the same screen, and a second command opens DeepSeek's own
 usage page in your browser.
 
-The sidebar footer carries the same balance, so it stays in view without opening anything.
-The row reads the reading the sampler already took and never makes a request of its own, so it
-costs nothing to leave on screen; pressing it shows today's and the 30 day spend. Turn it off
-or move it under Settings, then Sidebar.
+The sidebar footer carries the same balance, with what today has cost beside it, so both stay
+in view without opening anything. The row reads the reading the sampler already took and never
+makes a request of its own, so it costs nothing to leave on screen; pressing it shows the
+balance against today's and the 30 day limits. Turn it off or move it under Settings, then
+Sidebar.
 
 | Setting | Default | What it does |
 | --- | --- | --- |

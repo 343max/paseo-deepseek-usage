@@ -4,7 +4,7 @@ import { SidebarRow } from "@getpaseo/plugin/client/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Pressable, Text, View } from "react-native";
 import { CONSOLE_USAGE_URL } from "../shared/account.js";
-import { formatBalance } from "../shared/budget.js";
+import { formatAmount, formatBalance } from "../shared/budget.js";
 import { usageBalanceRpc } from "../shared/snapshot.js";
 import { formatSampledAt, formatSpend } from "./format.js";
 import { DeepSeekIcon } from "./deepseek-icon.js";
@@ -98,10 +98,11 @@ function BalanceDetails({ theme }: PluginPopoverProps) {
 }
 
 /**
- * The footer row. It shows the balance itself rather than a label, so the figure is what the row
- * announces; the item's registered title still names it in Settings > Sidebar.
+ * The footer row: the balance in the label, what today cost in the trailing slot. The balance
+ * is what the row announces, which is also why the item's registered title still names it in
+ * Settings > Sidebar; the popover spells both figures out.
  */
-export function BalanceSidebarItem({ openPopover }: PluginSidebarItemProps) {
+export function BalanceSidebarItem({ theme, openPopover }: PluginSidebarItemProps) {
   const query = useBalanceFigures();
   const data = query.data;
   const label =
@@ -110,5 +111,18 @@ export function BalanceSidebarItem({ openPopover }: PluginSidebarItemProps) {
       : data?.status === "unavailable"
         ? "Balance unavailable"
         : "Balance";
-  return <SidebarRow icon={DeepSeekIcon} label={label} onPress={() => openPopover(BalanceDetails)} />;
+  const today =
+    data?.status === "ok" ? `${formatAmount(data.daySpend, data.currency)} today` : null;
+  return (
+    <SidebarRow
+      icon={DeepSeekIcon}
+      label={label}
+      trailing={
+        today ? (
+          <Text style={{ color: theme.colors.foregroundMuted, fontSize: 12 }}>{today}</Text>
+        ) : undefined
+      }
+      onPress={() => openPopover(BalanceDetails)}
+    />
+  );
 }
